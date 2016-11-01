@@ -39,7 +39,7 @@ python -m pip install -U pip setuptools
 
 # Using Python for Webscraping
 
-In contrast to [querying API's with Python](), web-scraping relies on targeting the observed structure of a website itself to download specified content. A good conceptual model for web-scraping is the following example:
+In contrast to [querying API's with Python](https://github.com/jmausolf/Python_Tutorials/blob/master/Web_Scraping_and_APIs/Querying_APIs_with_Python.Rmd), web-scraping relies on targeting the observed structure of a website itself to download specified content. A good conceptual model for web-scraping is the following example:
 
 Suppose you would like to collect all the speeches and remarks of President Obama during his presidency. You could begin by going to the White House Speeches and Remarks website, finding a speech, copying the text, pasting it in a text file, and saving it. Repeat this process by navigating to the URL for each speech, copy, and download it. Obviously, this would be an onerous experience to do manually. Web-scraping offers a programmatic solution to automate this process.
 
@@ -89,16 +89,16 @@ Before turning to this example, I note the following essential web-scraping libr
 
 #### *Key Webscraping Tools*
 
-* ####[Beautiful Soup]()
-* ####[URLlib]()
+* #### [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+* #### [URLlib](https://docs.python.org/3/library/urllib.html)
 
 #### *Advanced Webscraping Tools*
 
-* ####[Selenium]() (For Advanced Web-scraping)
+* #### [Selenium](http://docs.seleniumhq.org) (For Advanced Web-scraping)
 
 #### *Analysis Tools*
 
-* ####[NLTK]() for text analysis
+* #### [NLTK](http://www.nltk.org) for text analysis
 
 ---
 
