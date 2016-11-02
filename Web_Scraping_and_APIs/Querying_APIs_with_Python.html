@@ -223,7 +223,7 @@ div.tocify {
 <div id="prerequisites" class="section level1">
 <h1>Prerequisites:</h1>
 <p>If you have not already done so, you will need to properly install an Anaconda distribution of Python, following the installation <a href="https://uc-cfss.github.io/setup00.html">instructions from the first week</a>.</p>
-<p>I would also recommend installing a friendly text editor for editing scripts such as Atom. Once installed, you can start a new script by simply typing in bash <code>atom name_of_your_new_script</code>. You can edit an existing script by using <code>atom name_of_script</code>. <a href="https://www.sublimetext.com">SublimeText</a> also works similar to Atom. Alternatively, you may use a native text editor such as <a href="https://www.linux.com/learn/vim-101-beginners-guide-vim">Vim</a>, but this has a higher learning curve.</p>
+<p>I would also recommend installing a friendly text editor for editing scripts such as <a href="https://atom.io">Atom</a>. Once installed, you can start a new script by simply typing in bash <code>atom name_of_your_new_script</code>. You can edit an existing script by using <code>atom name_of_script</code>. <a href="https://www.sublimetext.com">SublimeText</a> also works similar to Atom. Alternatively, you may use a native text editor such as <a href="https://www.linux.com/learn/vim-101-beginners-guide-vim">Vim</a>, but this has a higher learning curve.</p>
 <div id="installing-new-python-packages" class="section level3">
 <h3>Installing New Python Packages</h3>
 <p>One way to install new packages not already included in Anaconda is using <code>conda install &lt;package&gt;</code>. While packages in Anaconda are curated, they are not always the most up to date version. Furthermore, not all packages are available with <code>conda install</code>.</p>
@@ -235,35 +235,37 @@ div.tocify {
 <div id="on-windows" class="section level4">
 <h4>On Windows</h4>
 <pre class="bash"><code>python -m pip install -U pip setuptools</code></pre>
+<hr />
 </div>
 </div>
 </div>
 <div id="using-python-to-work-with-apis" class="section level1">
 <h1>Using Python to Work with API’s</h1>
-<p>API’s or Application Program Interfaces are a problematically enabled method to interact with website content from tech providers like Facebook, Twitter, Google, Spottily, or governmental or non-profit institutions like the Securities Exchange Commission or the Sunlight Foundation.</p>
+<p>API’s or Application Program Interfaces are a problematically enabled method to interact with website content from tech providers like Facebook, Twitter, Google, Spotify, or governmental and non-profit institutions like the Securities Exchange Commission or the Sunlight Foundation.</p>
 <div id="credentials-and-api-documentation" class="section level3">
 <h3>Credentials and API Documentation</h3>
-<p>Each API is site specific but frequently has extensive documentation and examples for developers. To begin working, you will typically have to register to get API credentials. Keep these credentials secret by putting them in a separate file e.g. <code>credentials.py</code> and excluding this file in a <code>.gitignore</code>.</p>
+<p>Each API is site specific but fortunately often has extensive documentation and examples for developers. To begin working, you will typically have to register to get API credentials. Keep these credentials secret by putting them in a separate file e.g. <code>credentials.py</code> and excluding this file in a <code>.gitignore</code>.</p>
 </div>
 <div id="python-requests" class="section level3">
 <h3>Python Requests</h3>
-<p>Another key elements common to many API’s are the requests module. If not already installed, use <code>pip install requests</code>. The requests module is typically used to get the response from an API for a given URL.</p>
+<p>Another key element common to many API’s are the requests module. If not already installed, use <code>pip install requests</code>. The requests module is typically used to get the response from an API for a given URL.</p>
 </div>
 <div id="json" class="section level3">
 <h3>JSON</h3>
-<p>Another key element often found is JSON (JavaScript Object Notation), a relatively simply data storage format. Most responses to API queries are returned as JSON, and you will often extract particular elements that you desire for your script.</p>
+<p>Another key element is JSON (JavaScript Object Notation), a relatively simply data storage format. Most responses to API queries are returned in JSON format, and you will need to extract particular elements for your script.</p>
 <p>Fully covering the nuts and bolts of Python Requests and JSON for using API’s is beyond the current scope. However, <strong>two good tutorials are linked below</strong> for further exploration if desired:</p>
 <ul>
 <li><h4 id="realpython"><a href="https://realpython.com/blog/python/api-integration-in-python">RealPython</a></h4></li>
 <li><h4 id="dataquest"><a href="https://www.dataquest.io/blog/python-api-tutorial/">DataQuest</a></h4></li>
 </ul>
+<p>Today, we will focus on using the Twitter API services in Python.</p>
 <hr />
 </div>
 </div>
 <div id="exploring-the-twitter-api-with-python" class="section level1">
 <h1>Exploring the Twitter API with Python</h1>
 <p>One of the many available API’s available to researchers is the Twitter API. Specifically, Twitter has two discrete API’s, the <a href="https://dev.twitter.com/rest/public">REST API</a> and the <a href="https://dev.twitter.com/streaming/overview">STREAMING API</a>. The REST API can collect past data going back seven days. Conversely, the STREAMING API collects information moving forward.</p>
-<p>Note, that in either case, the data returned by the API’s are not complete data, but rather a small sub-sample of all available content. The <a href="https://dev.twitter.com/streaming/firehose">FIREHOSE API</a> (a specialized version of the STREAMING API) and <a href="http://support.gnip.com/apis/">GNIP API</a> have more data, but are not covered here.</p>
+<p>Note, that in either case, the data returned by the API’s are not complete data, but rather a small sub-sample of all available content. The <a href="https://dev.twitter.com/streaming/firehose">FIREHOSE API</a> (a specialized version of the STREAMING API) and <a href="http://support.gnip.com/apis/">GNIP API</a> have more data for commercial use, but are not covered here.</p>
 <p>To demonstrate exploration with the REST and STREAMING API’s, I have written <a href="https://github.com/jmausolf/Twitter_Tweet_Counter">code to interact with both the REST API and STREAMING API</a> using two popular Python packages:</p>
 <div id="python-twitter-api-packages-required-dependencies" class="section level3">
 <h3>Python Twitter API Packages (Required Dependencies):</h3>
@@ -271,7 +273,7 @@ div.tocify {
 <li><a href="https://github.com/geduldig/TwitterAPI">TwitterAPI</a> : <code>pip install TwitterAPI</code></li>
 <li><a href="http://tweepy.readthedocs.io/en/v3.5.0/">Tweepy</a>: <code>pip install tweepy</code></li>
 </ul>
-<p>I use the TwitterAPI to interact with REST and Tweepy to interact with STREAMING, respectively. In both cases, my code will return a CSV of collected Tweets for given criteria.</p>
+<p>I illustrate using the TwitterAPI to interact with REST and Tweepy to interact with STREAMING API’s, respectively. In both cases, my code will return a CSV of collected Tweets for given criteria. Once we have this data, we could conduct further analysis if desired.</p>
 <hr />
 </div>
 </div>
@@ -307,8 +309,7 @@ div.tocify {
 </ul>
 <p>Create a “mycredentials.py” file following the format of example_credentials.py:</p>
 <pre class="bash"><code>cp example_credentials.py mycredentials.py
-atom mycredentials.py
-</code></pre>
+atom mycredentials.py</code></pre>
 <p>Edit the file by pasting in your credentials from Twitter. Only replace the quoted material with your actual keys. Save the file and close.</p>
 <pre class="python"><code>consumer_key = &quot;yoursecretconsumerkey&quot;
 consumer_secret = &quot;yoursupersecret_consumer_secret&quot;
@@ -324,7 +325,7 @@ access_token_secret = &quot;your_access_token_secret&quot;</code></pre>
 </div>
 <div id="example-no-limit-can-take-a-long-time" class="section level3">
 <h3>Example: No Limit (Can Take a Long Time)</h3>
-<pre class="shell"><code>
+<pre class="bash"><code>
 #One Hashtag
 python Twitter_Counter.py '#Obama'
 
@@ -338,7 +339,7 @@ python Twitter_Counter.py '#OccupyWallStreet' '#OWS'
 </div>
 <div id="example-specified-limit-faster" class="section level3">
 <h3>Example: Specified Limit (Faster)</h3>
-<pre class="shell"><code>
+<pre class="bash"><code>
 #One Hashtag
 python Twitter_Counter.py '#Obama' --limit 100
 
@@ -357,7 +358,7 @@ python Twitter_Counter.py '#OccupyWallStreet' '#OWS' --limit 100
 </div>
 <div id="example-streaming-for-hillary-tweets" class="section level3">
 <h3>Example: Streaming for Hillary Tweets</h3>
-<pre><code>#One Keyword
+<pre class="bash"><code>#One Keyword
 python Streaming_Tweets.py &quot;Hillary&quot;
 
 #Two or More Keywords

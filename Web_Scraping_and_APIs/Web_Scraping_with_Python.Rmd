@@ -17,7 +17,7 @@ knitr::opts_chunk$set(cache=TRUE)
 
 If you have not already done so, you will need to properly install an Anaconda distribution of Python, following the installation [instructions from the first week](https://uc-cfss.github.io/setup00.html).
 
-I would also recommend installing a friendly text editor for editing scripts such as Atom. Once installed, you can start a new script by simply typing in bash `atom name_of_your_new_script`. You can edit an existing script by using `atom name_of_script`. [SublimeText](https://www.sublimetext.com) also works similar to Atom. Alternatively, you may use a native text editor such as [Vim](https://www.linux.com/learn/vim-101-beginners-guide-vim), but this has a higher learning curve.
+I would also recommend installing a friendly text editor for editing scripts such as [Atom](https://atom.io). Once installed, you can start a new script by simply typing in bash `atom name_of_your_new_script`. You can edit an existing script by using `atom name_of_script`. [SublimeText](https://www.sublimetext.com) also works similar to Atom. Alternatively, you may use a native text editor such as [Vim](https://www.linux.com/learn/vim-101-beginners-guide-vim), but this has a higher learning curve.
 
 ### Installing New Python Packages
 
@@ -36,12 +36,15 @@ pip install -U pip setuptools
 ```bash
 python -m pip install -U pip setuptools
 ```
+---
 
 # Using Python for Webscraping
 
 In contrast to [querying API's with Python](https://github.com/jmausolf/Python_Tutorials/blob/master/Web_Scraping_and_APIs/Querying_APIs_with_Python.Rmd), web-scraping relies on targeting the observed structure of a website itself to download specified content. A good conceptual model for web-scraping is the following example:
 
-Suppose you would like to collect all the speeches and remarks of President Obama during his presidency. You could begin by going to the White House Speeches and Remarks website, finding a speech, copying the text, pasting it in a text file, and saving it. Repeat this process by navigating to the URL for each speech, copy, and download it. Obviously, this would be an onerous experience to do manually. Web-scraping offers a programmatic solution to automate this process.
+Suppose you would like to collect all the speeches and remarks of President Obama during his presidency. You could begin by going to the [White House Speeches and Remarks website](https://www.whitehouse.gov/briefing-room/speeches-and-remarks), finding a speech, copying the text, pasting it in a text file, and saving it. Repeat this process by navigating to the URL for each speech, copy the speech, and save it. Obviously, this would be an onerous experience to do manually. Web-scraping offers a programmatic solution to automate this process.
+
+We will return to a simplified example of scraping presidential speech later in the tutorial. Before we get deeper into this, let's review the key ideas in web-scraping.
 
 ## Essential Processes of Webscraping
 
@@ -49,7 +52,7 @@ Suppose you would like to collect all the speeches and remarks of President Obam
 
 ####(1) Finding URLs to Download
 
-Finding URLs to download is often one of the most challenging parts of web-scraping and is highly dependent on the website layout, URL construction, and formatting. Your basic goal in this section is to generate a list or CSV or URLs to download. 
+Finding URLs to download is often one of the most challenging parts of web-scraping and is highly dependent on the website layout, URL construction, and formatting. Your basic goal here is to generate a list or CSV of URLs to download. *How do I know what the URLs should be?*
 
 Some sites have very clean URLs:
 
@@ -59,31 +62,34 @@ http://www.example.com/content/file_01_02_2016.txt
 ...
 http://www.example.com/content/file_12_31_2016.txt
 ```
-In such a case, the URLs themselves follow a formula. Generating the list of URLs is a simple matter of using string manipulation to create URLs for all possible datetimes that exist and you desire.
+In such a case, the URLs themselves follow a formula. Generating the list of URLs is a simple matter of using string manipulation to create URLs for all possible datetimes that exist in the range you desire.
 
 This is rarely the case. Often URLs will have no programmable format. You must instead collect them. Here the strategy is to begin at the base_URL for your desired site content. From here, there will be one or more links (which lead to one or more link combinations) leading to the final URL. The task is to write a series of loops that recursively go through each possible path to get to the final set of URLs. This is site dependent. 
 
-Some sites have pager functions: **Page 1 of X**. Others have JavaScript that dynamically render site content when the user scrolls to the end of the page. Pager functions and series of file paths can be solved using BeautifulSoup and URLlib. Dynamic pages are best resolved using a package like Selenium.
+Some sites have pager functions: **Page 1 of X**. Others have JavaScript that dynamically render site content when the user scrolls to the end of the page. Pager functions or other file paths can be solved using BeautifulSoup and URLlib. Dynamic pages are best resolved using a package like Selenium.
 
 These topics are beyond the current scope. Today, we will be emphasizing the most basic of web-scraping tasks, downloading content for a specific URL. 
 
 ####(2) Downloading URLs
 
-Once you have a URL, downloading it can be achieved in various ways, and depends on the format. If your file exists as a plain text file or pdf, you could simply download it from the command line using `curl` or [`wget`](https://pypi.python.org/pypi/wget)
+Once you have a URL, downloading it can be achieved in various ways, and depends on the format. If your file exists as a plain text file or pdf, you could simply download it from the command line using `curl` or [`wget`](https://pypi.python.org/pypi/wget).
 
 
 ```bash
+#Getting the Congressional Record
 wget https://www.gpo.gov/fdsys/pkg/CREC-2011-09-21/pdf/CREC-2011-09-21.pdf
 ```
 
-Alternatively, for standard websites, you will often want to use an HTLM parser using BeautifulSoup. Note that you can use wget on most any website. For standard websites, it will download the raw HTML (the main web development structure). Below, I demonstrate a simple implementation of BeautifulSoup. 
+Alternatively, for standard websites, you will often want to use an HTLM parser such as BeautifulSoup. 
+
+Note that you could use wget on most websites. For standard websites, however, wget will download the raw HTML (the main web development structure). This is not very readable and much longer than the desired content. Below, I demonstrate a simple implementation of BeautifulSoup to get select speech content.
 
 
 ---
  
 # An Example of Elementary Webscraping in Python
 
-Before turning to this example, I note the following essential web-scraping libraries in Python, outlined below as follows:
+Before turning to this example, please note the following web-scraping libraries in Python:
 
 ### *Essential Tools for Webscraping*
 
@@ -119,7 +125,7 @@ This will launch your web-browser and Jupyter from the location you run the abov
 
 Open the folder `Webscraping_and_APIs_in_Python` and open the notebook `Elementary_Web_Scraping.ipynb`.
 
-If you cannot launch the notebook, you can [view the HTML version here]().
+If you cannot launch the notebook, you can [view the HTML version here](https://uc-cfss.github.io/lab06b.html).
 
 
 ---
