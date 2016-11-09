@@ -1,57 +1,36 @@
-import os
-import glob
+import os, re, glob, nltk
 import numpy as np
 import pandas as pd
 import sklearn.feature_extraction.text as text
 from sklearn import decomposition
-import nltk
 from nltk import word_tokenize
+from custom_stopword_tokens import custom_stopwords
 
-#from nltk.tokenize import TreebankWordTokenizer
-import re
+# Import Custom User Stopwords (If Any)
+from nltk.corpus import stopwords
+print("User specified custom stopwords: {} ...".format(str(custom_stopwords)[1:-1]))
 
-def remove_non_ascii_2(text):
-	import re
-	return re.sub(r'[^\x00-\x7F]+', "", text)
-
-def make_text(file, path=''):
-    if path=='':
-        filepath = file
-    else:
-        filepath = path+"/"+file
-
-    f = open(filepath)
-    raw0 = f.read()
-    raw1 = remove_non_ascii_2(raw0)
-    tokens = word_tokenize(raw1)
-    text = nltk.Text(tokens)
-    return text
+# ----------------------------------------------#
+# SUPPORT FUNCTIONS
+# ----------------------------------------------#
 
 def tokenize_nltk(text):
-    tokens = word_tokenize(text)
-    text = nltk.Text(tokens)
-    words = [w.lower() for w in text if w.isalpha()]
-    return words
+	"""
+	Note: 	This function imports a list of custom stopwords from the user
+			If the user does not modify custom stopwords (default=[]),
+			there is no substantive update to the stopwords.
+	"""
+	tokens = word_tokenize(text)
+	text = nltk.Text(tokens)
+	stop_words = set(stopwords.words('english'))
+	stop_words.update(custom_stopwords)
+	words = [w.lower() for w in text if w.isalpha() and w.lower() not in stop_words]
+	return words
 
-
-
-#Define Corpus Path and Files
-#file_path = os.path.join('data', 'president')
-#file_path = os.path.join('data', 'Speech_President')
-#file_path = os.path.join('data', 'twitter')
-#print(file_path)
-
-#os.chdir(file_path)
-#filenames = glob.glob("*.txt")
-#filenames = glob.glob("*.csv")
-
-#rawcsv = "Hillary_Tweets.csv"
-#twitter = pd.read_table(rawcsv, sep=",")
-#filenames = twitter['TWEET']
 
 def select_files(text_or_tweet, file_path="."):
 
-	print(file_path)
+	#Set Data Directory
 	os.chdir(file_path)
 
 	try:
@@ -64,15 +43,12 @@ def select_files(text_or_tweet, file_path="."):
 		else:
 			print("please specify 'text' or 'tweet' for your input type...")
 
-
 		print("Selecting {} files from {}...".format(len(filenames), file_path))
 		return filenames
 
 	except:
 		print("please check your file path specification...")
 
-#select_files("tweet", "data/twitter")
-#select_files("text", "data/president")
 
 def select_vectorizer(vectorizer_type, req_ngram_range=[1,2]):
 
@@ -115,11 +91,10 @@ def select_vectorizer(vectorizer_type, req_ngram_range=[1,2]):
 		print("error")
 		pass
 
-#select_vectorizer("text_count_custom", 5, 15, [1,2])
-#x = select_vectorizer("tweet_tfidf_std", [1,2])
-#print(x)
 
-#print("Selecting {} files from {}...".format(len(filenames), file_path))
+# ----------------------------------------------#
+# MAIN TOPIC MODEL FUNCTION
+# ----------------------------------------------#
 
 def topic_modeler(vectorizer_type, text_or_tweet, n_topics, n_top_terms, req_ngram_range=[1,2], file_path="."):
 
@@ -134,7 +109,6 @@ def topic_modeler(vectorizer_type, text_or_tweet, n_topics, n_top_terms, req_ngr
 	"""
 
 	# Select Files or Text to Analyze
-	#select_files("tweet", "data/twitter")
 	filenames = select_files(text_or_tweet, file_path)
 
 	# Specify Number of Topics, Ngram Structure, and Terms per Topic
@@ -172,6 +146,13 @@ def topic_modeler(vectorizer_type, text_or_tweet, n_topics, n_top_terms, req_ngr
 	for t in range(len(topic_words)):
 	    print("Topic {}: {}".format(t, ', '.join(topic_words[t][:])))
 
-#topic_modeler(vectorizer_type, text_or_tweet, n_topics, n_top_terms, req_ngram_range=[1,2], file_path=".")
+
+# ----------------------------------------------#
+# EXAMPLES RUNNING THE FUNCTION
+# ----------------------------------------------#
+
+#topic_modeler(vectorizer_type, text_or_tweet, n_topics, n_top_terms, req_ngram_range, file_path)
 topic_modeler("tweet_tfidf_std", "tweet", 10, 5, [1,3], "data/twitter")
 #topic_modeler("text_tfidf_std", 10, 5, [1,3])
+#topic_modeler("tweet_tfidf_std", "tweet", 10, 5, [1,3])
+#topic_modeler("text_tfidf_custom", "text", 10, 5, [2,5], "data/president")
