@@ -224,9 +224,10 @@ div.tocify {
 <h1>Prerequisites:</h1>
 <p>If you have not already done so, you will need to properly install an Anaconda distribution of Python, following the installation <a href="https://uc-cfss.github.io/setup00.html">instructions from the first week</a>.</p>
 <p>I would also recommend installing a friendly text editor for editing scripts such as <a href="https://atom.io">Atom</a>. Once installed, you can start a new script by simply typing in bash <code>atom name_of_your_new_script</code>. You can edit an existing script by using <code>atom name_of_script</code>. <a href="https://www.sublimetext.com">SublimeText</a> also works similar to Atom. Alternatively, you may use a native text editor such as <a href="https://www.linux.com/learn/vim-101-beginners-guide-vim">Vim</a>, but this has a higher learning curve.</p>
+<p><a href="http://stackoverflow.com/questions/22390709/open-atom-editor-from-command-line"><em>Note: If <code>atom</code> does not automatically work, try these solutions</em></a>.</p>
 <div id="installing-new-python-packages" class="section level3">
 <h3>Installing New Python Packages</h3>
-<p>If you do not have a package, you may use the <a href="https://packaging.python.org/installing/">Python package manager <code>pip</code></a> (a default python program) to install it. Note that pip is called directly from the Shell (not in a python interpretter).</p>
+<p>If you do not have a package, you may use the <a href="https://packaging.python.org/installing/">Python package manager <code>pip</code></a> (a default python program) to install it. Note that pip is called directly from the Shell (not in a python interpreter).</p>
 <p>To begin, <strong>update pip</strong>.</p>
 <div id="on-mac-or-linux" class="section level4">
 <h4>On Mac or Linux</h4>
@@ -235,6 +236,7 @@ div.tocify {
 <div id="on-windows" class="section level4">
 <h4>On Windows</h4>
 <pre class="bash"><code>python -m pip install -U pip setuptools</code></pre>
+<p>To see further prerequisites, please visit the <a href="https://github.com/jmausolf/Python_Tutorials/tree/master/Topic_Models_for_Text">tutorial README</a>.</p>
 <hr />
 </div>
 </div>
@@ -242,7 +244,7 @@ div.tocify {
 <div id="using-python-for-topic-modeling" class="section level1">
 <h1>Using Python for Topic Modeling</h1>
 <p>In short, topic models are a form of unsupervised algorithms that are used to discover hidden patterns or topic clusters in text data. Today, we will be exploring the application of topic modeling in Python on previously collected raw text data and Twitter data.</p>
-<p>The primary package used for these topic modeling comes from the SciKit Learn (Sklearn) a Python package frequently used for machine learning. In particular, we are using Sklearn’s <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.decomposition">Matrix Decomposition</a> and <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.feature_extraction">Feature Extraction</a> modules.</p>
+<p>The primary package used for these topic modeling comes from the Sci-Kit Learn (Sklearn) a Python package frequently used for machine learning. In particular, we are using Sklearn’s <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.decomposition">Matrix Decomposition</a> and <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.feature_extraction">Feature Extraction</a> modules.</p>
 <hr />
 </div>
 <div id="quick-start-guide" class="section level1">
@@ -280,7 +282,7 @@ python topic_modelr.py &quot;tweet_tfidf_custom&quot; &quot;lda&quot; 15 5 1 4 &
 </div>
 <div id="what-is-going-on-here" class="section level3">
 <h3>What is going on here?</h3>
-<p>First, understand what is going on here. You are calling a Python script that utilizes various Python libraries, particulalry Sklearn, to analyze text data that is in your cloned repo. This script is an example of what you could write on your own using Python.</p>
+<p>First, understand what is going on here. You are calling a Python script that utilizes various Python libraries, particularly Sklearn, to analyze text data that is in your cloned repo. This script is an example of what you could write on your own using Python.</p>
 <p>To get a better idea of the script’s parameters, query the help function from the command line.</p>
 <pre class="bash"><code>python topic_modelr.py --help
 </code></pre>
@@ -352,12 +354,12 @@ optional arguments:
 <h5>Breaking this down:</h5>
 <ul>
 <li><code>python topic_modelr.py</code>: We initialize the model with this statement.</li>
-<li><code>&quot;text_tfidf_custom&quot;</code>: The next statement selects the vectorizer, which follows the format <code>&lt;doc_type&gt;_&lt;vectorizer_method&gt;_&lt;tokenizer&gt;</code>, thus <code>text_tfidf_custom</code>. We are analyzing text files using the tfidf vectorizer and a custom tokenizer. The custom tokenizer can remove additional stopwords from your topic model. You can modify this list in the <code>custom_stopword_tokens.py</code> file.</li>
+<li><code>&quot;text_tfidf_custom&quot;</code>: The next statement selects the vectorizer, which follows the format <code>&lt;doc_type&gt;_&lt;vectorizer_method&gt;_&lt;tokenizer&gt;</code>, thus <code>text_tfidf_custom</code>. We are analyzing text files using the tfidf vectorizer and a custom tokenizer. The custom tokenizer can remove additional stop-words from your topic model. You can modify this list in the <code>custom_stopword_tokens.py</code> file.</li>
 <li><code>&quot;nmf&quot;</code>: This specifies the topic model, in this case a Non-Negative Matrix Factorization (NMF)</li>
 <li><code>15</code> : 15 topics</li>
 <li><code>10</code> : 10 terms (ngrams) per topic. An ngram is one or more words</li>
 <li><code>2 4</code>: The ngram range. Get all ngrams between 2 and 4 words in length (excludes single words). Thus, “fair share” and “pay fair share” are examples of 2grams and 3grams.</li>
-<li><code>&quot;data/president&quot;</code>: The relative filepath to the data.</li>
+<li><code>&quot;data/president&quot;</code>: The relative file path to the data.</li>
 </ul>
 <p>For example, you can list the above data files using the following command:</p>
 <pre class="bash"><code>ls data/president
@@ -415,11 +417,14 @@ optional arguments:
 vectorizer = text.TfidfVectorizer(input='filename', analyzer='word', ngram_range=(ngram_lengths), stop_words='english', min_df=2)
 </code></pre>
 <p>Note that the structure is in place that this function could be easily modified is you would like to add additional models or classifiers by consulting the <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.decomposition">SKlearn Documentation</a></p>
+<div id="the-full-topic_modelr.py-script-is-available-on-github." class="section level5">
+<h5><a href="https://github.com/jmausolf/Python_Tutorials/blob/master/Topic_Models_for_Text/topic_modelr.py">The full <code>topic_modelr.py</code> script is available on Github.</a></h5>
 <hr />
+</div>
 </div>
 <div id="custom-stopwords" class="section level1">
 <h1>Custom Stopwords</h1>
-<p>In short, stopwords are routine words that we want to exclude from the analysis. They may include common articles like <code>the</code> or <code>a</code>. The Python script uses NLTK to exclude English stopwords and consider only alphabetical words versus numbers and puntuation.</p>
+<p>In short, stop-words are routine words that we want to exclude from the analysis. They may include common articles like <code>the</code> or <code>a</code>. The Python script uses NLTK to exclude English stop-words and consider only alphabetical words versus numbers and punctuation.</p>
 <div id="this-function-is-run-when-a-vectorizer-with-the-custom-extension-is-implemented." class="section level5">
 <h5>This function is run when a vectorizer with the <code>custom</code> extension is implemented.</h5>
 <pre class="python"><code>
@@ -442,13 +447,13 @@ def tokenize_nltk(text):
 </div>
 <div id="modifying-the-custom-stopwords" class="section level3">
 <h3>Modifying the Custom Stopwords</h3>
-<p>To modify the custom stopwords, open the <code>custom_stopword_tokens.py</code> file with your favorite text editor, e.g. do one of the following:</p>
+<p>To modify the custom stop-words, open the <code>custom_stopword_tokens.py</code> file with your favorite text editor, e.g. do one of the following:</p>
 <pre class="bash"><code>#On Mac
 atom custom_stopword_tokens.py #Open with Atom
 open -a SublimeText2 custom_stopword_tokens.py #Open with SublimeText2
 vi custom_stopword_tokens.py #Open with vim
 </code></pre>
-<p>Once open, simply feel free to add or delete keywords from one of the example lists, or create your own custom keyword list following the template. Save the result, and when you run the script, your custom stopwords will be excluded.</p>
+<p>Once open, simply feel free to add or delete keywords from one of the example lists, or create your own custom keyword list following the template. Save the result, and when you run the script, your custom stop-words will be excluded.</p>
 <hr />
 </div>
 </div>

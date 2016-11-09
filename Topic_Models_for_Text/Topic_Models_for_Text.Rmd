@@ -19,9 +19,11 @@ If you have not already done so, you will need to properly install an Anaconda d
 
 I would also recommend installing a friendly text editor for editing scripts such as [Atom](https://atom.io). Once installed, you can start a new script by simply typing in bash `atom name_of_your_new_script`. You can edit an existing script by using `atom name_of_script`. [SublimeText](https://www.sublimetext.com) also works similar to Atom. Alternatively, you may use a native text editor such as [Vim](https://www.linux.com/learn/vim-101-beginners-guide-vim), but this has a higher learning curve.
 
+[*Note: If `atom` does not automatically work, try these solutions*](http://stackoverflow.com/questions/22390709/open-atom-editor-from-command-line).
+
 ### Installing New Python Packages
 
-If you do not have a package, you may use the [Python package manager `pip`](https://packaging.python.org/installing/) (a default python program) to install it. Note that pip is called directly from the Shell (not in a python interpretter).
+If you do not have a package, you may use the [Python package manager `pip`](https://packaging.python.org/installing/) (a default python program) to install it. Note that pip is called directly from the Shell (not in a python interpreter).
 
 To begin, **update pip**. 
 
@@ -36,13 +38,16 @@ pip install -U pip setuptools
 ```bash
 python -m pip install -U pip setuptools
 ```
+
+To see further prerequisites, please visit the [tutorial README](https://github.com/jmausolf/Python_Tutorials/tree/master/Topic_Models_for_Text).
+
 ---
 
 # Using Python for Topic Modeling
 
 In short, topic models are a form of unsupervised algorithms that are used to discover hidden patterns or topic clusters in text data. Today, we will be exploring the application of topic modeling in Python on previously collected raw text data and Twitter data. 
 
-The primary package used for these topic modeling comes from the SciKit Learn (Sklearn) a Python package frequently used for machine learning. In particular, we are using Sklearn's [Matrix Decomposition](http://scikit-learn.org/stable/modules/classes.html#module-sklearn.decomposition) and [Feature Extraction](http://scikit-learn.org/stable/modules/classes.html#module-sklearn.feature_extraction) modules.
+The primary package used for these topic modeling comes from the Sci-Kit Learn (Sklearn) a Python package frequently used for machine learning. In particular, we are using Sklearn's [Matrix Decomposition](http://scikit-learn.org/stable/modules/classes.html#module-sklearn.decomposition) and [Feature Extraction](http://scikit-learn.org/stable/modules/classes.html#module-sklearn.feature_extraction) modules.
 
 ---
 
@@ -88,7 +93,7 @@ python topic_modelr.py "tweet_tfidf_custom" "lda" 15 5 1 4 "data/twitter"
 
 ### What is going on here?
 
-First, understand what is going on here. You are calling a Python script that utilizes various Python libraries, particulalry Sklearn, to analyze text data that is in your cloned repo. This script is an example of what you could write on your own using Python.
+First, understand what is going on here. You are calling a Python script that utilizes various Python libraries, particularly Sklearn, to analyze text data that is in your cloned repo. This script is an example of what you could write on your own using Python.
 
 To get a better idea of the script's parameters, query the help function from the command line.
 
@@ -168,12 +173,12 @@ python topic_modelr.py "text_tfidf_custom" "nmf" 15 10 2 4 "data/president"
 ##### Breaking this down:
 
 * `python topic_modelr.py`: We initialize the model with this statement.
-* `"text_tfidf_custom"`: The next statement selects the vectorizer, which follows the format `<doc_type>_<vectorizer_method>_<tokenizer>`, thus `text_tfidf_custom`. We are analyzing text files using the tfidf vectorizer and a custom tokenizer. The custom tokenizer can remove additional stopwords from your topic model. You can modify this list in the `custom_stopword_tokens.py` file.
+* `"text_tfidf_custom"`: The next statement selects the vectorizer, which follows the format `<doc_type>_<vectorizer_method>_<tokenizer>`, thus `text_tfidf_custom`. We are analyzing text files using the tfidf vectorizer and a custom tokenizer. The custom tokenizer can remove additional stop-words from your topic model. You can modify this list in the `custom_stopword_tokens.py` file.
 * `"nmf"`: This specifies the topic model, in this case a Non-Negative Matrix Factorization (NMF)
 * `15` : 15 topics
 * `10` : 10 terms (ngrams) per topic. An ngram is one or more words
 * `2 4`: The ngram range. Get all ngrams between 2 and 4 words in length (excludes single words). Thus, "fair share" and "pay fair share" are examples of 2grams and 3grams. 
-* `"data/president"`: The relative filepath to the data.
+* `"data/president"`: The relative file path to the data.
 
 For example, you can list the above data files using the following command:
 
@@ -243,14 +248,16 @@ You may notice that this code snippet calls a `select_vectorizer()` function. Th
 vectorizer = text.TfidfVectorizer(input='filename', analyzer='word', ngram_range=(ngram_lengths), stop_words='english', min_df=2)
 
 ```
-
 Note that the structure is in place that this function could be easily modified is you would like to add additional models or classifiers by consulting the [SKlearn Documentation](http://scikit-learn.org/stable/modules/classes.html#module-sklearn.decomposition)
+
+##### [The full `topic_modelr.py` script is available on Github.](https://github.com/jmausolf/Python_Tutorials/blob/master/Topic_Models_for_Text/topic_modelr.py)
+
 
 ---
 
 # Custom Stopwords
 
-In short, stopwords are routine words that we want to exclude from the analysis. They may include common articles like `the` or `a`. The Python script uses NLTK to exclude English stopwords and consider only alphabetical words versus numbers and puntuation. 
+In short, stop-words are routine words that we want to exclude from the analysis. They may include common articles like `the` or `a`. The Python script uses NLTK to exclude English stop-words and consider only alphabetical words versus numbers and punctuation. 
 
 ##### This function is run when a vectorizer with the `custom` extension is implemented.
 
@@ -276,7 +283,7 @@ def tokenize_nltk(text):
 
 ### Modifying the Custom Stopwords
 
-To modify the custom stopwords, open the `custom_stopword_tokens.py` file with your favorite text editor, e.g. do one of the following:
+To modify the custom stop-words, open the `custom_stopword_tokens.py` file with your favorite text editor, e.g. do one of the following:
 
 ```bash
 #On Mac
@@ -285,7 +292,8 @@ open -a SublimeText2 custom_stopword_tokens.py #Open with SublimeText2
 vi custom_stopword_tokens.py #Open with vim
 
 ```
-Once open, simply feel free to add or delete keywords from one of the example lists, or create your own custom keyword list following the template. Save the result, and when you run the script, your custom stopwords will be excluded.
+Once open, simply feel free to add or delete keywords from one of the example lists, or create your own custom keyword list following the template. Save the result, and when you run the script, your custom stop-words will be excluded.
+
 
 ---
 
