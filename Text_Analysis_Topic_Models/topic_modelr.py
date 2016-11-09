@@ -8,7 +8,7 @@ from custom_stopword_tokens import custom_stopwords
 
 # Import Custom User Stopwords (If Any)
 from nltk.corpus import stopwords
-print("User specified custom stopwords: {} ...".format(str(custom_stopwords)[1:-1]))
+#print("User specified custom stopwords: {} ...".format(str(custom_stopwords)[1:-1]))
 
 # ----------------------------------------------#
 # SUPPORT FUNCTIONS
@@ -74,6 +74,7 @@ def select_vectorizer(vectorizer_type, req_ngram_range=[1,2]):
 	elif vectorizer_type == "text_tfidf_custom":
 		# TFIDF Vectorizer with NLTK Tokenizer (Text)
 		vectorizer = text.TfidfVectorizer(input='filename', analyzer='word', ngram_range=(ngram_lengths), stop_words='english', min_df=2, tokenizer=tokenize_nltk)
+		print("User specified custom stopwords: {} ...".format(str(custom_stopwords)[1:-1]))
 		return vectorizer
 	elif vectorizer_type == "text_count_std":
 		vectorizer = text.CountVectorizer(input='filename', analyzer='word', ngram_range=(ngram_lengths), stop_words='english', min_df=2)
@@ -83,12 +84,12 @@ def select_vectorizer(vectorizer_type, req_ngram_range=[1,2]):
 		vectorizer = text.TfidfVectorizer(input='content', analyzer='word', ngram_range=(ngram_lengths), stop_words='english', min_df=2)
 		return vectorizer
 	elif vectorizer_type == "tweet_tfidf_custom":
-		print(vectorizer_type)
 		# Standard TFIDF Vectorizer (Content)
 		vectorizer = text.TfidfVectorizer(input='content', analyzer='word', ngram_range=(ngram_lengths), stop_words='english', min_df=2, tokenizer=tokenize_nltk)
+		print("User specified custom stopwords: {} ...".format(str(custom_stopwords)[1:-1]))
 		return vectorizer
 	else:
-		print("error")
+		print("error in vectorizer specification...")
 		pass
 
 
@@ -131,8 +132,15 @@ def topic_modeler(vectorizer_type, text_or_tweet, n_topics, n_top_terms, req_ngr
 	# DEFINE and BUILD MODEL
 	#---------------------------------#
 
-	#Define Topic Model
-	clf = decomposition.NMF(n_components=num_topics+1, random_state=3)
+	#Define Topic Model: Non-Negative Matrix Factorization (NMF)
+	#clf = decomposition.NMF(n_components=num_topics+1, random_state=3)
+
+	#Define Topic Model: LatentDirichletAllocation (LDA)
+	#clf = decomposition.LatentDirichletAllocation(n_topics=num_topics+1, random_state=3)
+
+	#Define Topic Model: KernelPCA
+	clf = decomposition.PCA(n_components=num_topics+1)
+
 
 	#Fit Topic Model
 	doctopic = clf.fit_transform(dtm)
@@ -151,8 +159,10 @@ def topic_modeler(vectorizer_type, text_or_tweet, n_topics, n_top_terms, req_ngr
 # EXAMPLES RUNNING THE FUNCTION
 # ----------------------------------------------#
 
+#TODO reduce tweet or text var, add clfs
 #topic_modeler(vectorizer_type, text_or_tweet, n_topics, n_top_terms, req_ngram_range, file_path)
-topic_modeler("tweet_tfidf_std", "tweet", 10, 5, [1,3], "data/twitter")
+#topic_modeler("tweet_tfidf_std", "tweet", 10, 5, [1,3], "data/twitter")
+topic_modeler("tweet_tfidf_custom", "tweet", 10, 5, [1,3], "data/twitter")
 #topic_modeler("text_tfidf_std", 10, 5, [1,3])
 #topic_modeler("tweet_tfidf_std", "tweet", 10, 5, [1,3])
 #topic_modeler("text_tfidf_custom", "text", 10, 5, [2,5], "data/president")
