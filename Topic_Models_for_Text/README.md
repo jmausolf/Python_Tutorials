@@ -17,29 +17,29 @@ To run this package, you will need several functions.
 
 1. Git clone this [repository](https://github.com/jmausolf/Python_Tutorials) and navigate to the tutorial:
 
-		```bash
-		git clone https://github.com/jmausolf/Python_Tutorials
-		cd Python_Tutorials/Topic_Models_for_Text/
-		```
+	```bash
+	git clone https://github.com/jmausolf/Python_Tutorials
+	cd Python_Tutorials/Topic_Models_for_Text/
+	```
 
 
 2. Run one of the examples:
 
-	##### Run a Non-Negative Matrix Factorization (NMF) topic model using a TFIDF vectorizer with custom tokenization
+	###### Run a Non-Negative Matrix Factorization (NMF) topic model using a TFIDF vectorizer with custom tokenization
 
-		```bash
-		# Run the NMF Model on Presidential Speech
-		python topic_modelr.py "text_tfidf_custom" "nmf" 15 10 2 4 "data/president"
+	```bash
+	# Run the NMF Model on Presidential Speech
+	python topic_modelr.py "text_tfidf_custom" "nmf" 15 10 2 4 "data/president"
 
-		```
+	```
 
-	##### Run a Latent Dirichlet Allocation (LDA) topic model using a TFIDF vectorizer with custom tokenization
+	###### Run a Latent Dirichlet Allocation (LDA) topic model using a TFIDF vectorizer with custom tokenization
 
-		```bash
-		# Run the LDA Model on Clinton Tweets
-		python topic_modelr.py "tweet_tfidf_custom" "lda" 15 5 1 4 "data/twitter"
+	```bash
+	# Run the LDA Model on Clinton Tweets
+	python topic_modelr.py "tweet_tfidf_custom" "lda" 15 5 1 4 "data/twitter"
 
-		```
+	```
 
 # Diving Into the Code
 
