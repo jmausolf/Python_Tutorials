@@ -13,9 +13,11 @@ This package allows you to analyze a set of `.txt` text files and quantify the c
 
 To run this package, you will need several functions.
 
-1. This package was written on and assumes you are running a Mac system, not Linux.
+1. This package was written on a MAC OSX system. It has not been tested on Linux or Windows.
 2. This package requires an Anaconda Distribution of Python, either 2.7+ or 3.5+
-	* see https://www.continuum.io/downloads
+	* see https://www.continuum.io/downloads. Although these packages should be included, you can install them if needed:
+
+	* NLTK `pip install NLTK`
 
 
 # To Run
