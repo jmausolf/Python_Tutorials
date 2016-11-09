@@ -1,4 +1,5 @@
 import os, csv, re, glob, nltk
+import argparse, textwrap
 import numpy as np
 import pandas as pd
 import sklearn.feature_extraction.text as text
@@ -154,7 +155,7 @@ def topic_modeler(vectorizer_type, topic_clf, n_topics, n_top_terms, req_ngram_r
 
 	elif topic_clf == "pca":
 
-		#Define Topic Model: PCA
+		#Define Topic Model: Principal Components Analysis (PCA)
 		clf = decomposition.PCA(n_components=num_topics+1)
 
 	else:
@@ -189,6 +190,38 @@ def topic_modeler(vectorizer_type, topic_clf, n_topics, n_top_terms, req_ngram_r
 # EXAMPLES RUNNING THE FUNCTION
 # ----------------------------------------------#
 
-topic_modeler("text_tfidf_custom", "nmf", 10, 5, [1,3], "data/president")
-topic_modeler("text_tfidf_custom", "pca", 10, 5, [1,3], "data/president")
-topic_modeler("tweet_tfidf_std", "lda", 10, 5, [1,3], "data/twitter")
+#topic_modeler("text_tfidf_custom", "nmf", 15, 10, [2,4], "data/president")
+#topic_modeler("text_tfidf_custom", "lda", 15, 10, [2,4], "data/president")
+#topic_modeler("text_tfidf_custom", "pca", 15, 10, [2,4], "data/president")
+#topic_modeler("tweet_tfidf_std", "lda", 15, 10, [1,4], "data/twitter")
+
+
+#topic_modeler(vectorizer_type, topic_clf, n_topics, n_top_terms, req_ngram_range=[1,2], file_path="."):
+
+if __name__=="__main__":
+    parser = argparse.ArgumentParser(description='Prepare input file',
+            formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('vectorizer_type', type=str,
+        help=textwrap.dedent("""\
+        	Select the desired vectorizer for either text or tweet
+        	@ text_tfidf_std       | TFIDF Vectorizer (for text)
+        	@ text_tfidf_custom    | TFIDF Vectorizer with Custom Tokenizer (for text)
+        	@ text_count_std       | Count Vectorizer
+
+        	@ tweet_tfidf_std      | TFIDF Vectorizer (for tweets)
+        	@ tweet_tfidf_custom   | TFIDF Vectorizer with Custom Tokenizer (for tweets)
+
+            """
+            ))
+    parser.add_argument('topic_clf', type=str,
+        help=textwrap.dedent("""\
+        	Select the desired topic model classifier (clf)
+        	@ lda | Topic Model: LatentDirichletAllocation (LDA)
+        	@ nmf | Topic Model: Non-Negative Matrix Factorization (NMF)
+        	@ pca | Topic Model: Principal Components Analysis (PCA)
+
+            """
+            ))
+
+    args = parser.parse_args()
+    #streaming_tweets(args.keywords)
