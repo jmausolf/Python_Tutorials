@@ -31,4 +31,6 @@ To run this package, you will need several functions.
 	python find_keywords.py
 	```
 
+To learn more about the code, please check out the [tutorial](https://github.com/jmausolf/Python_Tutorials/blob/master/Text_Keyword_Counter/Analyzing_Text_in_Python.Rmd)
+
 ---
