@@ -39,10 +39,10 @@ def tokenize_nltk(text):
 #file_path = os.path.join('data', 'president')
 #file_path = os.path.join('data', 'Speech_President')
 #file_path = os.path.join('data', 'twitter')
-print(file_path)
+#print(file_path)
 
-os.chdir(file_path)
-filenames = glob.glob("*.txt")
+#os.chdir(file_path)
+#filenames = glob.glob("*.txt")
 #filenames = glob.glob("*.csv")
 
 #rawcsv = "Hillary_Tweets.csv"
@@ -54,16 +54,25 @@ def select_files(text_or_tweet, file_path="."):
 	print(file_path)
 	os.chdir(file_path)
 
-	if text_or_tweet == "text":
-		filenames = glob.glob("*.txt")
-	elif text_or_tweet == "tweet":
-		rawcsv = "Hillary_Tweets.csv"
-		twitter = pd.read_table(rawcsv, sep=",")
-		filenames = twitter['TWEET']
+	try:
+		if text_or_tweet == "text":
+			filenames = glob.glob("*.txt")
+		elif text_or_tweet == "tweet":
+			rawcsv = glob.glob("*.csv")[0]
+			twitter_data = pd.read_table(rawcsv, sep=",")
+			filenames = twitter_data['TWEET']
+		else:
+			print("please specify 'text' or 'tweet' for your input type...")
 
-	return filenames
 
-select_files("tweet", "data/twitter")
+		print("Selecting {} files from {}...".format(len(filenames), file_path))
+		return filenames
+
+	except:
+		print("please check your file path specification...")
+
+#select_files("tweet", "data/twitter")
+#select_files("text", "data/president")
 
 def select_vectorizer(vectorizer_type, req_ngram_range=[1,2]):
 
@@ -110,9 +119,9 @@ def select_vectorizer(vectorizer_type, req_ngram_range=[1,2]):
 #x = select_vectorizer("tweet_tfidf_std", [1,2])
 #print(x)
 
-print("Selecting {} files from {}...".format(len(filenames), file_path))
+#print("Selecting {} files from {}...".format(len(filenames), file_path))
 
-def topic_modeler(vectorizer_type, n_topics, n_top_terms, req_ngram_range=[1,2]):
+def topic_modeler(vectorizer_type, text_or_tweet, n_topics, n_top_terms, req_ngram_range=[1,2], file_path="."):
 
 	"""
 	Select the desired vectorizer for either text or tweet
@@ -124,7 +133,11 @@ def topic_modeler(vectorizer_type, n_topics, n_top_terms, req_ngram_range=[1,2])
 	@ tweet_tfidf_custom
 	"""
 
-	#Specify Number of Topics, Ngram Structure, and Terms per Topic
+	# Select Files or Text to Analyze
+	#select_files("tweet", "data/twitter")
+	filenames = select_files(text_or_tweet, file_path)
+
+	# Specify Number of Topics, Ngram Structure, and Terms per Topic
 	num_topics = n_topics
 	num_top_words = n_top_terms
 	ngram_lengths = req_ngram_range
@@ -159,6 +172,6 @@ def topic_modeler(vectorizer_type, n_topics, n_top_terms, req_ngram_range=[1,2])
 	for t in range(len(topic_words)):
 	    print("Topic {}: {}".format(t, ', '.join(topic_words[t][:])))
 
-
-#topic_modeler("tweet_tfidf_std", 10, 5, [1,3])
+#topic_modeler(vectorizer_type, text_or_tweet, n_topics, n_top_terms, req_ngram_range=[1,2], file_path=".")
+topic_modeler("tweet_tfidf_std", "tweet", 10, 5, [1,3], "data/twitter")
 #topic_modeler("text_tfidf_std", 10, 5, [1,3])
