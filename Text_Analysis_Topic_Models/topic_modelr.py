@@ -1,4 +1,4 @@
-import os, re, glob, nltk
+import os, csv, re, glob, nltk
 import numpy as np
 import pandas as pd
 import sklearn.feature_extraction.text as text
@@ -8,11 +8,18 @@ from custom_stopword_tokens import custom_stopwords
 
 # Import Custom User Stopwords (If Any)
 from nltk.corpus import stopwords
-#print("User specified custom stopwords: {} ...".format(str(custom_stopwords)[1:-1]))
+
+# Original Working Directory
+owd = os.getcwd()
 
 # ----------------------------------------------#
 # SUPPORT FUNCTIONS
 # ----------------------------------------------#
+
+def start_csv(file_name):
+    with open(file_name, 'w') as f:
+        writer = csv.writer(f)
+
 
 def tokenize_nltk(text):
 	"""
@@ -97,7 +104,7 @@ def select_vectorizer(vectorizer_type, req_ngram_range=[1,2]):
 # MAIN TOPIC MODEL FUNCTION
 # ----------------------------------------------#
 
-def topic_modeler(vectorizer_type, n_topics, n_top_terms, req_ngram_range=[1,2], file_path="."):
+def topic_modeler(vectorizer_type, topic_clf, n_topics, n_top_terms, req_ngram_range=[1,2], file_path="."):
 
 	"""
 	Select the desired vectorizer for either text or tweet
@@ -111,7 +118,6 @@ def topic_modeler(vectorizer_type, n_topics, n_top_terms, req_ngram_range=[1,2],
 
 	# Determine Text of Tweet
 	text_or_tweet = str(vectorizer_type).split('_')[0]
-	print(text_or_tweet)
 
 	# Select Files or Text to Analyze
 	filenames = select_files(text_or_tweet, file_path)
@@ -136,14 +142,23 @@ def topic_modeler(vectorizer_type, n_topics, n_top_terms, req_ngram_range=[1,2],
 	# DEFINE and BUILD MODEL
 	#---------------------------------#
 
-	#Define Topic Model: Non-Negative Matrix Factorization (NMF)
-	#clf = decomposition.NMF(n_components=num_topics+1, random_state=3)
+	if topic_clf == "lda":
 
-	#Define Topic Model: LatentDirichletAllocation (LDA)
-	#clf = decomposition.LatentDirichletAllocation(n_topics=num_topics+1, random_state=3)
+		#Define Topic Model: LatentDirichletAllocation (LDA)
+		clf = decomposition.LatentDirichletAllocation(n_topics=num_topics+1, random_state=3)
 
-	#Define Topic Model: KernelPCA
-	clf = decomposition.PCA(n_components=num_topics+1)
+	elif topic_clf == "nmf":
+
+		#Define Topic Model: Non-Negative Matrix Factorization (NMF)
+		clf = decomposition.NMF(n_components=num_topics+1, random_state=3)
+
+	elif topic_clf == "pca":
+
+		#Define Topic Model: PCA
+		clf = decomposition.PCA(n_components=num_topics+1)
+
+	else:
+		pass
 
 
 	#Fit Topic Model
@@ -155,15 +170,25 @@ def topic_modeler(vectorizer_type, n_topics, n_top_terms, req_ngram_range=[1,2],
 
 
 	# Show the Top Topics
+	if not os.path.exists("results"):
+		os.makedirs("results")
+	os.chdir("results")
+	results_file = "clf_results_{}_model.csv".format(topic_clf)
+	start_csv(results_file)
+	print("writing topic model results in {}...".format(file_path+"/results/"+results_file))
 	for t in range(len(topic_words)):
-	    print("Topic {}: {}".format(t, ', '.join(topic_words[t][:])))
+		print("Topic {}: {}".format(t, ', '.join(topic_words[t][:])))
+		with open(results_file, 'a') as f:
+			writer = csv.writer(f)
+			writer.writerow(["Topic {}, {}".format(t, ', '.join(topic_words[t][:]))])
 
+	# Return to Original Directory
+	os.chdir(owd)
 
 # ----------------------------------------------#
 # EXAMPLES RUNNING THE FUNCTION
 # ----------------------------------------------#
 
-#TODO add clfs
-
-#topic_modeler("tweet_tfidf_custom", 10, 5, [1,3], "data/twitter")
-topic_modeler("text_tfidf_custom", 10, 5, [1,3], "data/president")
+topic_modeler("text_tfidf_custom", "nmf", 10, 5, [1,3], "data/president")
+topic_modeler("text_tfidf_custom", "pca", 10, 5, [1,3], "data/president")
+topic_modeler("tweet_tfidf_std", "lda", 10, 5, [1,3], "data/twitter")
