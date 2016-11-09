@@ -4,7 +4,7 @@
 
 This package allows you to analyze a set of `.txt` text files and quantify the count of a given set of keywords and phrases. It returns a .CSV of the results, which can be used to generate various graphs:
 
-![Discussion of Guns by President Obama and Congress, 2009-2016](/discussion_of_guns_graph.png)
+![Discussion of Guns by President Obama and Congress, 2009-2016](presidential_congressional_discussion_of_guns.png)
 
 ---
 
