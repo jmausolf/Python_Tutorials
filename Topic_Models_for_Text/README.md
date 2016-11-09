@@ -25,7 +25,7 @@ To run this package, you will need several functions.
 
 2. Run one of the examples:
 
-		##### Run a Non-Negative Matrix Factorization (NMF) topic model using a TFIDF vectorizer with custom tokenization
+	##### Run a Non-Negative Matrix Factorization (NMF) topic model using a TFIDF vectorizer with custom tokenization
 
 		```bash
 		# Run the NMF Model on Presidential Speech
@@ -33,7 +33,7 @@ To run this package, you will need several functions.
 
 		```
 
-		##### Run a Latent Dirichlet Allocation (LDA) topic model using a TFIDF vectorizer with custom tokenization
+	##### Run a Latent Dirichlet Allocation (LDA) topic model using a TFIDF vectorizer with custom tokenization
 
 		```bash
 		# Run the LDA Model on Clinton Tweets
