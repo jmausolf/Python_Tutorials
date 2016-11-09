@@ -5,10 +5,10 @@ import pandas as pd
 import sklearn.feature_extraction.text as text
 from sklearn import decomposition
 from nltk import word_tokenize
-from custom_stopword_tokens import custom_stopwords
+from nltk.corpus import stopwords
 
 # Import Custom User Stopwords (If Any)
-from nltk.corpus import stopwords
+from custom_stopword_tokens import custom_stopwords
 
 # Original Working Directory
 owd = os.getcwd()
@@ -108,13 +108,7 @@ def select_vectorizer(vectorizer_type, req_ngram_range=[1,2]):
 def topic_modeler(vectorizer_type, topic_clf, n_topics, n_top_terms, req_ngram_range=[1,2], file_path="."):
 
 	"""
-	Select the desired vectorizer for either text or tweet
-	@ text_tfidf_std
-	@ text_tfidf_custom
-	@ text_count_std
-
-	@ tweet_tfidf_std
-	@ tweet_tfidf_custom
+    Topic Modeling Function: See Argparse Documentation for Details
 	"""
 
 	# Determine Text of Tweet
@@ -186,8 +180,11 @@ def topic_modeler(vectorizer_type, topic_clf, n_topics, n_top_terms, req_ngram_r
 	# Return to Original Directory
 	os.chdir(owd)
 
+
+
+
 # ----------------------------------------------#
-# EXAMPLES RUNNING THE FUNCTION
+# EXAMPLES RUNNING THE FUNCTION WITHOUT ARGPARSE
 # ----------------------------------------------#
 
 #topic_modeler("text_tfidf_custom", "nmf", 15, 10, [2,4], "data/president")
@@ -195,8 +192,6 @@ def topic_modeler(vectorizer_type, topic_clf, n_topics, n_top_terms, req_ngram_r
 #topic_modeler("text_tfidf_custom", "pca", 15, 10, [2,4], "data/president")
 #topic_modeler("tweet_tfidf_std", "lda", 15, 10, [1,4], "data/twitter")
 
-
-#topic_modeler(vectorizer_type, topic_clf, n_topics, n_top_terms, req_ngram_range=[1,2], file_path="."):
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description='Prepare input file',
@@ -216,12 +211,60 @@ if __name__=="__main__":
     parser.add_argument('topic_clf', type=str,
         help=textwrap.dedent("""\
         	Select the desired topic model classifier (clf)
-        	@ lda | Topic Model: LatentDirichletAllocation (LDA)
-        	@ nmf | Topic Model: Non-Negative Matrix Factorization (NMF)
-        	@ pca | Topic Model: Principal Components Analysis (PCA)
+        	@ lda     | Topic Model: LatentDirichletAllocation (LDA)
+        	@ nmf     | Topic Model: Non-Negative Matrix Factorization (NMF)
+        	@ pca     | Topic Model: Principal Components Analysis (PCA)
+
+            """
+            ))
+    parser.add_argument('n_topics', type=int,
+        help=textwrap.dedent("""\
+            Select the number of topics to return (as integer)
+            Note: requires n >= number of text files or tweets
+
+            Consider the following examples:
+
+            @ 10     | Example: Returns 5 topics
+            @ 15     | Example: Returns 10 topics
+
+            """
+            ))
+    parser.add_argument('n_top_terms', type=int,
+        help=textwrap.dedent("""\
+            Select the number of top terms to return for each topic (as integer)
+            Consider the following examples:
+
+            @ 10     | Example: Returns 10 terms for each topic
+            @ 15     | Example: Returns 15 terms for each topic
+
+            """
+            ))
+    parser.add_argument('req_ngram_range', nargs='+', type=int,
+        help=textwrap.dedent("""\
+            Select the requested 'ngram' or number of words per term
+            @ NG-1:  | ngram of length 1, e.g. "pay"
+            @ NG-2:  | ngram of length 2, e.g. "fair share"
+            @ NG-3:  | ngram of length 3, e.g. "pay fair share"
+
+            Consider the following ngram range examples:
+
+            @ [1, 2] | Return ngrams of lengths 1 and 2
+            @ [2, 5] | Return ngrams of lengths 2 through 5
+
+            """
+            ))
+    parser.add_argument('file_path', type=str,
+        help=textwrap.dedent("""\
+            Select the desired file path for the data
+
+            Consider the following ngram range examples:
+
+            @ data/twitter      | Uses data in the data/twitter subdirectory
+            @ data/president    | Uses data in the data/president subdirectory
+            @ .                 | Uses data in the current directory
 
             """
             ))
 
     args = parser.parse_args()
-    #streaming_tweets(args.keywords)
+    topic_modeler(args.vectorizer_type, args.topic_clf, args.n_topics, args.n_top_terms, args.req_ngram_range, args.file_path)
