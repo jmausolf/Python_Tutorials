@@ -292,8 +292,13 @@ open -a SublimeText2 custom_stopword_tokens.py #Open with SublimeText2
 vi custom_stopword_tokens.py #Open with vim
 
 ```
+
+
 Once open, simply feel free to add or delete keywords from one of the example lists, or create your own custom keyword list following the template. Save the result, and when you run the script, your custom stop-words will be excluded.
 
+---
+
+#### Now that we have covered the basics, [FORK](https://github.com/jmausolf/Python_Tutorials/blob/master/README.md#fork-destination-box) this repository and analyze your own data.
 
 ---
 
