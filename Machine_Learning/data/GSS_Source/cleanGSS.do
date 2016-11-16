@@ -28,7 +28,22 @@ mvencode _all, mv(.a = -4 \ .b = -5 \ .c = -6 \ .u = -7)
 // findit mdesc //to install if needed
 mdesc
 
+//Make Some Indicator (0/1) Variables to Investigate
+tab partyid, gen(partyid)
+ren partyid1 partyid_na
+ren partyid2 partyid_dk
+ren partyid3 partyid_strdem
+ren partyid4 partyid_dem
+ren partyid5 partyid_ind_dem
+ren partyid6 partyid_ind
+ren partyid7 partyid_ind_rep
+ren partyid8 partyid_rep
+ren partyid9 partyid_str_rep
+ren partyid10 partyid_other
+
+
 // Save Result
 //Change to Data Directory
 cd "../"
 export delimited using "gss2014.csv", nolabel replace
+cd "GSS_Source"
