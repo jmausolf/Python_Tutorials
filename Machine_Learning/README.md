@@ -43,7 +43,7 @@ Once you edit these fields, save the script, and in terminal execute: `python ru
 
 Your data may have hundreds of features (independent variables/predictors). If you would like to use all of them (and would rather not type write them all out explicitly) simply uses the `--all_features` option of the magic loop.
 
-```python
+```bash
 python run.py --all_features True
 ```
 
@@ -53,4 +53,4 @@ Of course, an overlooked aspect thus far is feature development. The GSS data in
 
 ## Acknowledgements
 
-This tutorial makes use of a [modified submodule](https://github.com/jmausolf/magicloops), originally forked from @rayidghani's [magicloops](https://github.com/rayidghani/magicloops). It has been updated to run in Python2 or Python3. In addition, my modified fork modifies the plotting code and several of the functions to take a user-specified dataset, outcome variable, and features. 
+This tutorial makes use of a [modified submodule](https://github.com/jmausolf/magicloops), originally forked from @rayidghani [magicloops](https://github.com/rayidghani/magicloops). It has been updated to run in Python2 or Python3. In addition, my modified fork modifies the plotting code and several of the functions to take a user-specified dataset, outcome variable, and features.
