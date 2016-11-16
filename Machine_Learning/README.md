@@ -17,7 +17,7 @@ Example data for this repository comes from the [General Social Survey (GSS) 201
 To run the example:
 
 ```bash
-git clone https://github.com/jmausolf/Python_Tutorials
+git clone --recursive https://github.com/jmausolf/Python_Tutorials
 cd Python_Tutorials/Machine_Learning
 python run.py
 ```
