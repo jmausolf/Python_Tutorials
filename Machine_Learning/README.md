@@ -6,7 +6,7 @@ We do not assume *a priori* that any single model will be best for the data. Ins
 
 ### Example Precision-Recall Plot:
 
-![](example.png)
+![](results/example.png)
 
 ---
 
