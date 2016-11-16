@@ -226,7 +226,7 @@ div.tocify {
 <p>If you have not already done so, you will need to properly install an Anaconda distribution of Python, following the installation <a href="https://uc-cfss.github.io/setup00.html">instructions from the first week</a>.</p>
 <p>I would also recommend installing a friendly text editor for editing scripts such as <a href="https://atom.io">Atom</a>. Once installed, you can start a new script by simply typing in bash <code>atom name_of_your_new_script</code>. You can edit an existing script by using <code>atom name_of_script</code>. <a href="https://www.sublimetext.com">SublimeText</a> also works similar to Atom. Alternatively, you may use a native text editor such as <a href="https://www.linux.com/learn/vim-101-beginners-guide-vim">Vim</a>, but this has a higher learning curve.</p>
 <p><a href="http://stackoverflow.com/questions/22390709/open-atom-editor-from-command-line"><em>Note: If <code>atom</code> does not automatically work, try these solutions</em></a>.</p>
-<p>Further documentation can be found on the <a href="https://github.com/jmausolf/Python_Tutorials/tree/master/Machine_Learning">tutorial README</a>.</p>
+<p><strong>Further documentation can be found on the <a href="https://github.com/jmausolf/Python_Tutorials/tree/master/Machine_Learning">tutorial README</a>.</strong></p>
 <hr />
 </div>
 <div id="machine-learning-tutorial" class="section level1">
@@ -243,12 +243,14 @@ div.tocify {
 </div>
 <div id="quick-start-guide" class="section level2">
 <h2>Quick Start Guide</h2>
-<p>Example data for this repository comes from the <a href="http://gss.norc.org/get-the-data/stata">General Social Survey (GSS) 2014</a>. More notes on the data preprocessing are detailed in the <a href="data/">data</a> folder.</p>
-<p>To run the example:</p>
+<p>Example data for this repository comes from the <a href="http://gss.norc.org/get-the-data/stata">General Social Survey (GSS) 2014</a>. More notes on the data preprocessing are detailed in the <a href="https://github.com/jmausolf/Python_Tutorials/tree/master/Machine_Learning/data">data</a> folder.</p>
+<div id="to-run-the-example-link-to-tutorial-repository" class="section level5">
+<h5>To run the example <a href="https://github.com/jmausolf/Python_Tutorials/tree/master/Machine_Learning">(link to tutorial repository)</a>:</h5>
 <pre class="bash"><code>git clone --recursive https://github.com/jmausolf/Python_Tutorials
 cd Python_Tutorials/Machine_Learning
 python run.py</code></pre>
 <hr />
+</div>
 </div>
 <div id="modifying-the-details" class="section level2">
 <h2>Modifying The Details</h2>
@@ -271,7 +273,7 @@ features = ['age', 'sex', 'race', 'educ', 'rincome']</code></pre>
 </div>
 <div id="looking-under-the-hood" class="section level2">
 <h2>Looking Under the Hood:</h2>
-<p>To understand the in’s and out’s of the magic loop, let’s first look at a very simple example of the example data on a single model:</p>
+<p>To understand the in’s and out’s of the magic loop <a href="https://github.com/jmausolf/magicloops/blob/master/magicloops.py">(full code here)</a>, let’s first look at a very simple example of the example data on a single model:</p>
 <pre class="python"><code>from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import train_test_split

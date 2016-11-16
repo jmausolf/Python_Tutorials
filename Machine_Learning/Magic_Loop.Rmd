@@ -21,7 +21,7 @@ I would also recommend installing a friendly text editor for editing scripts suc
 
 [*Note: If `atom` does not automatically work, try these solutions*](http://stackoverflow.com/questions/22390709/open-atom-editor-from-command-line).
 
-Further documentation can be found on the [tutorial README](https://github.com/jmausolf/Python_Tutorials/tree/master/Machine_Learning).
+**Further documentation can be found on the [tutorial README](https://github.com/jmausolf/Python_Tutorials/tree/master/Machine_Learning).**
 
 ---
 
@@ -34,15 +34,17 @@ A fundamental principal is that we do not assume *a priori* that any single mode
 
 ### Example Precision-Recall Plot:
 
-![](results/example.png)
+![](https://raw.githubusercontent.com/jmausolf/Python_Tutorials/master/Machine_Learning/results/example.png)
 
 ---
 
 ## Quick Start Guide
 
-Example data for this repository comes from the [General Social Survey (GSS) 2014](http://gss.norc.org/get-the-data/stata). More notes on the data preprocessing are detailed in the [data](data/) folder.
+Example data for this repository comes from the [General Social Survey (GSS) 2014](http://gss.norc.org/get-the-data/stata). More notes on the data preprocessing are detailed in the [data](https://github.com/jmausolf/Python_Tutorials/tree/master/Machine_Learning/data) folder.
 
-To run the example:
+
+##### To run the example [(link to tutorial repository)](https://github.com/jmausolf/Python_Tutorials/tree/master/Machine_Learning):
+
 
 ```bash
 git clone --recursive https://github.com/jmausolf/Python_Tutorials
@@ -81,7 +83,7 @@ Of course, an overlooked aspect thus far is feature development. The GSS data in
 
 ## Looking Under the Hood:
 
-To understand the in's and out's of the magic loop, let's first look at a very simple example of the example data on a single model:
+To understand the in's and out's of the magic loop [(full code here)](https://github.com/jmausolf/magicloops/blob/master/magicloops.py), let's first look at a very simple example of the example data on a single model:
 
 ```python
 from sklearn import metrics
