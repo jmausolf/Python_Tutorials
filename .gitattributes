@@ -1,4 +1,5 @@
 *.html linguist-language=HTML
 
-* linguist-vendored
+#* linguist-vendored
 *.html linguist-vendored=true
+*.py   linguist-vendored=false
