@@ -1,0 +1,416 @@
+---
+title: "Using PostgreSQL in Python"
+author: "Joshua G. Mausolf"
+date: "November 21, 2016"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+Today we will be learning about using databases with Python. In particular, we will be exploring a few examples on a PostgreSQL database. Please note, that this will not be a reproducible demonstration.
+
+Databases, such as PostgreSQL require user authentication to access and are particular to a given database structure. Once you have access to a database, you can employ similar techniques. The below prerequisites will be useful to edit and run scripts once you have a database connection.
+
+
+# Prerequisites:
+
+If you have not already done so, you will need to properly install an Anaconda distribution of Python, following the installation [instructions from the first week](https://uc-cfss.github.io/setup00.html).
+
+I would also recommend installing a friendly text editor for editing scripts such as [Atom](https://atom.io). Once installed, you can start a new script by simply typing in bash `atom name_of_your_new_script`. You can edit an existing script by using `atom name_of_script`. [SublimeText](https://www.sublimetext.com) also works similar to Atom. Alternatively, you may use a native text editor such as [Vim](https://www.linux.com/learn/vim-101-beginners-guide-vim), but this has a higher learning curve.
+
+[*Note: If `atom` does not automatically work, try these solutions*](http://stackoverflow.com/questions/22390709/open-atom-editor-from-command-line).
+
+**Further documentation can be found on the [tutorial README](https://github.com/jmausolf/Python_Tutorials/tree/master/PostgresSQL_Python).**
+
+---
+
+
+
+# PostgreSQL with Python Tutorial
+
+This module illustrates some basic techniques to connect to and use data from a relational database, in this case, [PostgreSQL](https://www.postgresql.org), one of several [SQL-based databases](https://en.wikipedia.org/wiki/SQL). If you would like to learn more about the systems theory side of relational database management systems (RDBMS), the ["Database Systems and Concepts" is a good resource](http://codex.cs.yale.edu/avi/db-book/db6/slide-dir/).
+
+
+## Using an SQL-Database
+
+Using a database in Python relies on being able to write database queries in SQL. In fact, a good way to test your Python scripts, is to first test the SQL commands in a third-party program such as [DBeaver](http://dbeaver.jkiss.org).
+
+A good place you can currently live practice these skills is [SQLZOO]()
+
+---
+
+#### The Basics
+
+In an SQL-language, data is stored in tables. Tables often are nested in a group called a "schema." You may have multiple schema's in a database.
+
+$$ \text{Database} \supset \text{Schema} \supset \text{Table} $$
+
+Example: Suppose you have a database that has data and results of a machine learning problem such as predicting adverse police incidents. The results are stored in the **"results"** schema. Specific model metrics are in the **"evaluations"** table. To view all such results:
+
+```sql
+select * from results.evaluations;
+
+```
+
+Decomposing this query, we have several essential elements: `select`. What task are we doing, `select`. Next, what do we want to return? If everything use `*`. If you only want one column `your_colunm_name`. Thus `select *` or `select your_column_name`. Next, where are your data stored: `from`? Specify a `schema.table`. 
+
+Putting this together, we have the general form: `select * from schema.table;` Note: it is best to end your SQL statements with a "`;`". 
+
+Now suppose you want only the results for a specific model id, parameter, and metric, and parameter, you can use a `where` statement to specify:
+
+```sql
+select * from results.evaluations
+	where model_id=971
+	and metric='false negatives@' and parameter='75.0';
+	
+```
+
+---
+
+## Connecting to Database in Python
+
+A simple way to connect to a database is to use Python. Here, you will first need a credentials file, such as `example_psql.py`:
+
+```python
+PGHOST=your_database_host
+PGDATABASE=your_database_name
+PGUSER=your_database_username
+PGPASSWORD=your_database_secret_password
+```
+
+Next, you will need to import several packages:
+
+```python
+import psycopg2
+import sys, os
+import numpy as np
+import pandas as pd
+import example_psql as creds
+import pandas.io.sql as psql
+```
+
+Finally, the database connection can be relatively simple:
+
+
+```python
+## ****** LOAD PSQL DATABASE ***** ##
+
+
+# Set up a connection to the postgres server.
+conn_string = "host="+ creds.PGHOST +" port="+ "5432" +" dbname="+ creds.PGDATABASE +" user=" + creds.PGUSER \
++" password="+ creds.PGPASSWORD
+conn=psycopg2.connect(conn_string)
+print("Connected!")
+
+# Create a cursor object
+cursor = conn.cursor()
+
+
+def load_data(schema, table):
+
+    sql_command = "SELECT * FROM {}.{};".format(str(schema), str(table))
+    print (sql_command)
+
+    # Load the data
+    data = pd.read_sql(sql_command, conn)
+
+    print(data.shape)
+    return (data)
+    
+```
+
+To underscore what this code is doing, it connects to your database using your credentials and returns the data you queried, i.e. the `select * from schema.table;` as a Pandas data frame. You can then visualize or analyze this data just as you would any data loaded into Pandas from a CSV.
+
+---
+
+## A More Complex Example
+
+Rather than this simple connection, we can instead use a series of functions in a separate script to connect to the database. This script is located in `setup/setup_environment.py`:
+
+
+```python
+#!/usr/bin/env python
+import os
+import yaml
+from sqlalchemy import create_engine
+import logging
+
+log = logging.getLogger(__name__)
+
+
+def get_database():
+    try:
+        engine = get_connection_from_profile()
+        log.info("Connected to PostgreSQL database!")
+    except IOError:
+        log.exception("Failed to get database connection!")
+        return None, 'fail'
+
+    return engine
+
+
+def get_connection_from_profile(config_file_name="default_profile.yaml"):
+    """
+    Sets up database connection from config file.
+    Input:
+    config_file_name: File containing PGHOST, PGUSER,
+                      PGPASSWORD, PGDATABASE, PGPORT, which are the
+                      credentials for the PostgreSQL database
+    """
+
+    with open(config_file_name, 'r') as f:
+        vals = yaml.load(f)
+
+    if not ('PGHOST' in vals.keys() and
+            'PGUSER' in vals.keys() and
+            'PGPASSWORD' in vals.keys() and
+            'PGDATABASE' in vals.keys() and
+            'PGPORT' in vals.keys()):
+        raise Exception('Bad config file: ' + config_file_name)
+
+    return get_engine(vals['PGDATABASE'], vals['PGUSER'],
+                      vals['PGHOST'], vals['PGPORT'],
+                      vals['PGPASSWORD'])
+
+
+def get_engine(db, user, host, port, passwd):
+    """
+    Get SQLalchemy engine using credentials.
+    Input:
+    db: database name
+    user: Username
+    host: Hostname of the database server
+    port: Port number
+    passwd: Password for the database
+    """
+
+    url = 'postgresql://{user}:{passwd}@{host}:{port}/{db}'.format(
+        user=user, passwd=passwd, host=host, port=port, db=db)
+    engine = create_engine(url, pool_size = 50)
+    return engine
+```
+
+#### Once we have this script, we can connect to the database in a new script:
+
+```python
+import sys
+import os
+import pandas as pd
+import subprocess
+import argparse
+import pdb
+import pickle
+from setup import setup_environment
+
+# Make PostgreSQL Connection
+engine = setup_environment.get_database()
+try:
+    con = engine.raw_connection()
+    con.cursor().execute("SET SCHEMA '{}'".format('your_schema_name'))
+except:
+    pass
+```
+
+Note: in this code example, we would want to replace 'your_schema_name' with the particular name of your schema, for example, the 'models' schema.
+
+### Trying some complex queries:
+
+Now that we have made the database connection, we can try a complex query, such as returning the pickle files (a Pythonic method of storing data) for model results built using Sci-kit Learn. Full code is available in the `prepare.py` script in the tutorial repository.
+
+```python
+def get_pickle_best_models(timestamp, metric, parameter=None, number=25, directory="results/"):
+
+    """
+    --------------------------------------------------------
+    Get the PICKLE FILE of the best models
+    by the specified timestamp and given metric
+    RETURNS the PICKLE FILE to a DIRECTORY
+    --------------------------------------------------------
+    ARGUMENTS:
+        timestamp:  models run on or after given timestamp
+                    example: '2016-08-03'
+        metric:     metric to be optimized
+                    example: 'precision@'
+        parameter:  parameter value or threshold if any
+                    default=None
+                    example: '10.0'
+        number:     maximum number of desired results
+                    default = 25
+    --------------------------------------------------------
+    """
+
+    if parameter is None:
+        query = ("SELECT pickle_blob, run_time  FROM \
+                    (SELECT evaluations.model_id, run_time \
+                        FROM results.evaluations JOIN results.models \
+                        ON evaluations.model_id=models.model_id \
+                        WHERE run_time >= '{}' \
+                        AND value is not null \
+                        AND metric = '{}' \
+                        ORDER BY value DESC LIMIT {}) \
+                    AS top_models \
+                    INNER JOIN results.data \
+                    ON top_models.model_id=data.model_id ; " ).format(timestamp, metric, number)
+
+    elif parameter is not None:
+        query = ("SELECT pickle_blob, run_time  FROM \
+                    (SELECT evaluations.model_id, run_time \
+                        FROM results.evaluations JOIN results.models \
+                        ON evaluations.model_id=models.model_id \
+                        WHERE run_time >= '{}' \
+                        AND value is not null \
+                        AND metric = '{}' \
+                        AND parameter = '{}' \
+                        ORDER BY value DESC LIMIT {}) \
+                    AS top_models \
+                    INNER JOIN results.data \
+                    ON top_models.model_id=data.model_id ; " ).format(timestamp, metric, parameter, number)
+
+
+
+    df_models = pd.read_sql(query, con=con)
+    N = len(df_models['pickle_blob'])
+
+    for file_number in range(0, N):
+        pickle_file = pickle.loads(df_models['pickle_blob'].iloc[file_number])
+        file_name = df_models['run_time'].apply(lambda x: str(x).replace(' ', 'T')).iloc[file_number]
+        if parameter is None:
+            full_file_name = "police_eis_results_"+"top_"+metric+"any"+"_"+file_name+".pkl"
+        elif parameter is not None:
+            full_file_name = "police_eis_results_"+"top_"+metric+parameter+"_"+file_name+".pkl"
+        file_path = directory+full_file_name
+        pickle.dump(pickle_file, open( file_path, "wb" ) )
+
+    return None
+```
+
+
+### Disecting this Function:
+
+*Taking out some of the detail, we have these general processes*
+
+```python
+
+def get_pickle_best_models(timestamp, metric, parameter=None, number=25, directory="results/"):
+
+    if parameter is None:
+        # Do Query WITHOUT Parameter
+
+    elif parameter is not None:
+        # Do Query WITH Parameter
+
+    # Run Query and Store Results as Pandas Data Frame
+    df_models = pd.read_sql(query, con=con)
+    
+    # Loop Over Dataframe to Save Pickle Files for Different Model Run Times
+    # (Code Here)
+    
+```
+
+#### Writing a Python Query
+
+As seen in the example, we write the SQL query as a string:
+
+```python
+query = ("Long SQL Query as a String")
+```
+
+Here, we can insert variables into the query using the `.format(var)` method. In this way, we can systematically vary the query based on various arguments passed to the function. The full form of one of the above queries is as follows:
+
+```sql
+
+query = ("SELECT pickle_blob, run_time  FROM \
+              (SELECT evaluations.model_id, run_time \
+              FROM results.evaluations JOIN results.models \
+              ON evaluations.model_id=models.model_id \
+              WHERE run_time >= '{}' \
+              AND value is not null \
+              AND metric = '{}' \
+              AND parameter = '{}' \
+              ORDER BY value DESC LIMIT {}) \
+          AS top_models \
+          INNER JOIN results.data \
+          ON top_models.model_id=data.model_id ; " ).format(timestamp, metric, parameter, number)
+                    
+```
+
+
+*Note the format of the query.* In the python code, we need to break query lines with `\` and use the format function `'{}'.format(x)` to insert variables into the script. Your format brackets will either need single quotes around it or not, depending on if you are trying to pass a string value or numeric value into your query. Abstracting the query from Python manipulation, we are left with a SQL query. Below, I have plugged in some example values for the Python formatting of the timestamp, metric, parameter, and number of results:
+
+```sql
+
+SELECT pickle_blob, run_time  FROM 
+          (SELECT evaluations.model_id, run_time 
+              FROM results.evaluations JOIN results.models 
+              ON evaluations.model_id=models.model_id 
+              WHERE run_time >= '2016-08-03' 
+              AND value is not null 
+              AND metric = 'precision@' 
+              AND parameter = '10.0' 
+              ORDER BY value DESC LIMIT 10) 
+          AS top_models 
+          INNER JOIN results.data 
+          ON top_models.model_id=data.model_id ;
+                    
+```
+
+#### What are we returning?
+
+The above query is a more complex example, but a valuable one to work with. First, what do we want to return:
+
+* pickle_blob
+* run_time
+
+*e.g. `SELECT pickle_blob, runtime`
+
+#### Where does this data come from?
+
+* a join of the `results.data` table with a join on the `results.evaluations` and `results.models` via a subquery.
+
+In the above example we want both the model's `pickle_blob` and the model's `run_time`. We also need the best models on certain criteria. Yet, all of these attributes are in discrete tables in the `results` schema. As a result, we must do several joins of these tables.
+
+Technically, we are doing what is called a *sub-query*. Note the first line of the main query `SELECT pickle_blob, run_time  FROM` where the `FROM` refers to a subquery in parentheses (SELECT...LIMIT 10), which we refer to with the alias `AS top_models`. 
+
+Here, the `top_models` is an arbitrary name defined and used only within the query. You could replace `top_models` with `x` or `y` or `my_best_model_ever`. The name does not matter as long as it is discrete from the other table names and reserved SQL-statements such as `select`. It simply refers to the result of our subquery.
+
+In essence, the subquery returns a selective version of the joined `results.models` and `results.evaluations` table. We do an `INNER JOIN` using the `top_models` subquery on a key id using `ON top_models.model_id=data.model_id`.
+
+#### What is our subquery?
+
+```sql
+
+SELECT evaluations.model_id, run_time 
+      FROM results.evaluations JOIN results.models 
+      ON evaluations.model_id=models.model_id 
+      WHERE run_time >= '2016-08-03' 
+      AND value is not null 
+      AND metric = 'precision@' 
+      AND parameter = '10.0' 
+      ORDER BY value DESC LIMIT 10 
+```
+
+The subquery actually also conducts a join on the `results.evaluations` and `results.models` tables, joined on the `model_id`. It returns the `model_id` and `run_time` from the joined table. 
+
+##### Criteria:
+
+Here, we only want models that fit certain criteria:
+
+* timestamp `WHERE run_time >= '2016-08-03'`
+* non-null results on the `value` column: `AND value is not null`
+* metric `AND metric = 'precision@'`
+* parameter `AND parameter = '10.0'`
+* n-top results `ORDER BY value DESC LIMIT 10`
+
+As we can see, although we have many elements of this query, we can manipulate the query using Python. In the end, we can harness the power of databases and the functionality of Python to build dynamic code.
+
+---
+
+##### Now that we have covered the basics, [FORK](https://github.com/jmausolf/Python_Tutorials/blob/master/README.md#fork-destination-box) this repository and analyze your own data.
+
+
+---
